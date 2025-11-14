@@ -1,0 +1,13 @@
+name: hello workflow
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  Hello-job:
+    runs-on: ubuntu-slim
+    steps:
+      - name: say hello
+        run: echo "Hello"
+  
