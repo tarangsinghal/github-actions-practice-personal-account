@@ -5,13 +5,14 @@ on:
   push:
 
 jobs:
-  Hello-job:
+  Hello:
     runs-on: ubuntu-slim
     steps:
       - name: say hello
         run: echo "Hello"
 # By default, workflows run in parallel  
   Good-Bye:
+    needs: Hello     # If you want sequential execution
     runs-on: ubuntu-slim
     steps:
       - name: say goodbye
