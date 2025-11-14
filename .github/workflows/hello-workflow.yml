@@ -10,4 +10,15 @@ jobs:
     steps:
       - name: say hello
         run: echo "Hello"
+# By default, workflows run in parallel  
+  Good-Bye:
+    runs-on: ubuntu-slim
+    steps:
+      - name: say goodbye
+        run: echo "GoodBye!!!!"
+      - name: Event name
+        run:  |
+          echo "Event name: ${{github.event_name}}"
+
+  
   
