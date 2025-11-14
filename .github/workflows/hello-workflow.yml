@@ -19,7 +19,8 @@ jobs:
         run: echo "GoodBye!!!!"
       - name: Event name
         run:  |
-          echo "Event name: ${{github.event_name}}"
+          echo "Event name: ${{github.event_name}} on runner $RUNNER_OS"
+    
 
   
   
