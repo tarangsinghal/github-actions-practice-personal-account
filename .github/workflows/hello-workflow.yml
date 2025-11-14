@@ -19,7 +19,11 @@ jobs:
         run: echo "GoodBye!!!!"
       - name: Event name
         run:  |
-          echo "Event name: ${{github.event_name}} on runner $RUNNER_OS"
+          echo "Event name: ${{github.event_name}}"
+      - name: Runner OS
+        shell: bash
+        run:  |
+          echo "This job is running on runner - $RUNNER_OS"
     
 
   
