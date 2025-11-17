@@ -20,6 +20,10 @@ jobs:
       - name: Event name
         run:  |
           echo "Event name: ${{github.event_name}}"
+  Extras:
+    if: github.ref == 'refs/heads/main'
+    runs-on: Ubuntu-slim
+    steps:
       - name: Runner OS
         shell: bash
         run:  |
