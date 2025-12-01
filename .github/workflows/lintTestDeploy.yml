@@ -1,9 +1,9 @@
-name: Deploy project
+name: Lint Test and Deploy
 
-on: [push, workflow_dispatch]
+on: workflow_dispatch
 
 jobs:
-  test:
+  lintAndTest:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -14,10 +14,12 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: npm ci
-      - name: Execute tests
+      - name: Run Lint
+        run: npm lint
+      - name: Run Tests
         run: npm test
   deploy:
-    needs: test
+    needs: lintAndTest
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -28,9 +30,7 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: npm ci
-      - name: Build project
+      - name: Build code
         run: npm run build
-      - name: Deploy
-        run: echo "Deploying..."
-
-      
+      - name: Deploy code
+        run: echo "Deploying code..."
