@@ -1,15 +1,21 @@
-name: Events Type Demo
+name: Events Filters Demo
 
 on:
   pull_request:
     types:
       - opened
       - edited
+    branches:
+      - main
+      - features/**
   workflow_dispatch:
   push:
     branches:
       - main
-
+      - dev-* # dev-new dev-this-is-new
+      - feature/** # feature/new or feature/new/more/slashes
+    paths-ignore:
+      - '.github/workflows/*'
 # types: [opened, edited, closed]
 
 jobs:
