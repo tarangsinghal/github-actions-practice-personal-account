@@ -30,7 +30,8 @@ jobs:
       - name: Set Env variable
         env:
           MY_WISH: YOUR_WISH 
-        run: "MY_WISH: ${{ env.MY_WISH }} "
+        run: |
+          echo "MY_WISH: ${{ env.MY_WISH }} "
       # - name: Run server
       #   env:
       #     MY_WISH: YOUR_WISH # Just to demonstrate that env can be defined at step level too
