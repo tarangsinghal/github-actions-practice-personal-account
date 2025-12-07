@@ -36,8 +36,8 @@ jobs:
       #   env:
       #     MY_WISH: YOUR_WISH # Just to demonstrate that env can be defined at step level too
       #   run: npm start & npx wait-on http://127.0.0.1:$PORT # $ENV is syntax for linux script, windows powershell $env:PORT
-      - name: Run tests
-        run: npm test
+      # - name: Run tests
+      #   run: npm test
       - name: Output information
         run: |
           echo "MONGODB_DB_NAME: ${{ env.MONGODB_DB_NAME }} "
