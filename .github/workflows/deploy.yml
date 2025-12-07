@@ -9,6 +9,7 @@ env:
   CACHE_KEY: node-deps
   MONGODB_DB_NAME: gha-demo
 jobs:
+
   test:
     # environment: sit
     runs-on: ubuntu-latest
@@ -38,8 +39,43 @@ jobs:
       - name: Output information
         run: |
           echo "MONGODB_USERNAME: $MONGODB_USERNAME"
+  dev:
+    # environment: sit
+    runs-on: ubuntu-latest
+    container:
+      image: node:16
+      # You can specify image environment variables using 'env' here
+    env:
+      MONGODB_CONNECTION_PROTOCOL: mongodb
+      MONGODB_CLUSTER_ADDRESS: mongodb # service name
+      MONGODB_USERNAME: root
+      MONGODB_PASSWORD: password1
+      PORT: 8080
+    services:
+      mongodb:
+        image: mongo # Name from dockerhub https://hub.docker.com/_/mongo
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: password1
+    steps:
+      - name: Get Code
+        uses: actions/checkout@v4
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ env.CACHE_KEY }}-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Run server
+        run: npm start & npx wait-on http://127.0.0.1:$PORT # requires MongoDB Atlas to accept requests from anywhere!
+      - name: Run tests
+        run: npm test
+      - name: Output information
+        run: |
+          echo "MONGODB_USERNAME: $MONGODB_USERNAME"
   deploy:
-    needs: test
+    needs: [dev,test]
     runs-on: ubuntu-latest
     steps:
       - name: Output information
