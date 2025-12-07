@@ -11,10 +11,17 @@ on:
     secrets:
       ADMIN_EMAIL:
         required: false
+    outputs:
+      result:
+        description: The result of deployment operation
+        value: ${{ jobs.deploy.outputs.outcome }}
+
 
 
 jobs:
   deploy:
+    outputs:
+      outcome: ${{ steps.set-result.outputs.step-result }}
     runs-on: ubuntu-latest
     steps:
       - name: Get build artifacts
@@ -27,3 +34,6 @@ jobs:
         run: echo ${{ secrets.ADMIN_EMAIL }}
       - name: Deploy
         run: echo "Deploying..."
+      - name: Set Result Output
+        id: set-result
+        run: echo "step-result=success" >> "$GITHUB_OUTPUT"
