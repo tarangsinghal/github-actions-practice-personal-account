@@ -1,66 +1,55 @@
-name: Deploy website
-
+name: Deployment
 on:
   push:
     branches:
       - main
+      - dev
+
+env:
+  MONGODB_DB_NAME: mongo-demo
 
 jobs:
   test:
+    env:
+      MONGODB_CLUSTER_ADDRESS: cluster1.12hnvyfd.mongodb.net
+      MONGODB_USERNAME: mongoUser
+      MONGODB_PASSWORD: mongoPass
+      PORT: 8080
+    # environment: testing
     runs-on: ubuntu-latest
     steps:
-      - name: Get code
+      - name: Get Code
         uses: actions/checkout@v3
-      - name: Cache Dependencies
+      - name: Cache dependencies
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
+          key: npm-deps-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
-      - name: Run Lint
-        run: npm run lint
-      - name: Test code
-        run: npm run test
-  build:
+      - name: Run server
+        env:
+          MY_WISH: YOUR_WISH # Just to demonstrate that env can be defined at step level too
+        run: npm start & npx wait-on http://127.0.0.1:$PORT # $ENV is syntax for linux script, windows powershell $env:PORT
+      - name: Run tests
+        run: npm test
+      - name: Output information
+        run: |
+          echo "MONGODB_DB_NAME: ${{ env.MONGODB_DB_NAME }} "
+          echo "MONGODB_CLUSTER_ADDRESS: ${{ env.MONGODB_CLUSTER_ADDRESS }} "
+          echo "MONGODB_USERNAME: ${{ env.MONGODB_USERNAME }} "
+          echo "MONGODB_PASSWORD: ${{ env.MONGODB_PASSWORD }} "
+          echo "PORT: ${{ env.PORT }} "
+          echo "MY_WISH: ${{ env.MY_WISH }} "
+  deploy:
     needs: test
     runs-on: ubuntu-latest
-    outputs:
-      script-file: ${{ steps.publish.outputs.script-file }} # Any name of your choice
     steps:
-      - name: Get code
-        uses: actions/checkout@v3
-      - name: Cache Dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
-        run: npm ci
-      - name: Build website
-        run: npm run build
-      - name: Publish JS filename
-        id: publish # ANy name of your choice
-        run: find dist/assets/*.js -type f -execdir echo 'script-file={}' >> "$GITHUB_OUTPUT" ';'
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-files
-          path: dist
-          # path: |
-          #   dist
-          #   package.json
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-files
-      - name: Display contents
-        run: ls
-      - name: Output JS filename
-        run: echo "${{ needs.build.outputs.script-file }}"
-      - name: Deploy website
-        run: echo "Deploying..."
+      - name: Output information
+        run: |
+          echo "MONGODB_DB_NAME: ${{ env.MONGODB_DB_NAME }} "
+          echo "MONGODB_CLUSTER_ADDRESS: ${{ env.MONGODB_CLUSTER_ADDRESS }} "
+          echo "MONGODB_USERNAME: ${{ env.MONGODB_USERNAME }} "
+          echo "MONGODB_PASSWORD: ${{ env.MONGODB_PASSWORD }} "
+          echo "PORT: ${{ env.PORT }} "
+          echo "MY_WISH: ${{ env.MY_WISH }} "
