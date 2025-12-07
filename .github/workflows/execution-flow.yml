@@ -12,11 +12,12 @@ jobs:
         uses: actions/checkout@v4
       - name: Cache dependencies
         id: cache
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Lint code
         run: npm run lint
@@ -27,15 +28,18 @@ jobs:
         uses: actions/checkout@v4
       - name: Cache dependencies
         id: cache
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Test code
+        id: run-tests
         run: npm run test
       - name: Upload test report
+        if: failure() && steps.run-tests.outcome == 'failure'
         uses: actions/upload-artifact@v4
         with:
           name: test-report
@@ -48,11 +52,12 @@ jobs:
         uses: actions/checkout@v4
       - name: Cache dependencies
         id: cache
-        uses: actions/cache@v4
+        uses: actions/cache@v3
         with:
-          path: ~/.npm
+          path: node_modules
           key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
       - name: Build website
         id: build-website
@@ -74,3 +79,12 @@ jobs:
         run: ls
       - name: Deploy
         run: echo "Deploying..."
+  report:
+    needs: [lint, deploy]
+    if: failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output info
+        run: |
+          echo "Something went wrong..."
+          echo "${{ toJson(github) }}"
