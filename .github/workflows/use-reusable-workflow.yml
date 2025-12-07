@@ -72,6 +72,8 @@ jobs:
     uses: ./.github/workflows/reusable.yml
     with:
       artifact-name: dist-files
+    secrets:
+      ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
   report:
     needs: [lint, deploy]
     if: failure()

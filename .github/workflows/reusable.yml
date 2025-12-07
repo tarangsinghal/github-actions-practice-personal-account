@@ -8,6 +8,9 @@ on:
         type: string
         required: false
         default: dist-files
+    secrets:
+      ADMIN_EMAIL:
+        required: false
 
 
 jobs:
@@ -20,5 +23,7 @@ jobs:
           name: ${{ inputs.artifact-name }}
       - name: Output contents
         run: ls
+      - name: Admin email
+        run: echo ${{ secrets.ADMIN_EMAIL }}
       - name: Deploy
         run: echo "Deploying..."
