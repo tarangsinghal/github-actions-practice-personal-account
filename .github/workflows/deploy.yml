@@ -35,7 +35,9 @@ jobs:
           caching: true
           cached_directory: 'node_modules'
       - name: Output information
-        run: echo "Cache used?  ${{ steps.cache-deps.outputs.cache-on }}"
+        run: |
+          echo "Cache used?  ${{ steps.cache-deps.outputs.cache-on }}"
+          echo "Cache hit?  ${{ steps.cache-deps.outputs.cache-hit }}"
       - name: Test code
         id: run-tests
         run: npm run test
@@ -59,7 +61,9 @@ jobs:
           caching: false
           cached_directory: 'node_modules'
       - name: Output information
-        run: echo "Cache used?  ${{ steps.cache-deps.outputs.cache-on }}"
+        run: |
+          echo "Cache used?  ${{ steps.cache-deps.outputs.cache-on }}"
+          echo "Cache hit?  ${{ steps.cache-deps.outputs.cache-hit }}"
       - name: Build website
         run: npm run build
       - name: Upload artifacts
