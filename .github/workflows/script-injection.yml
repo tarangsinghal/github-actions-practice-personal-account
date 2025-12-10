@@ -1,9 +1,9 @@
 name: Script Injection demonstration
 
 on:
-  issues:
-    types:
-      - opened
+  # issues:
+  #   types:
+  #     - opened
   workflow_dispatch:
 
 jobs:
