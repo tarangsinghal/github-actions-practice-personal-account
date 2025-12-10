@@ -11,6 +11,12 @@ inputs:
     description: 'Directory to be cached like "node_modules"'
     required: true
 
+
+outputs:
+  used-cache:
+    description: 'Whether caching was used or not'
+    value: ${{ steps.install-dependencies }}
+
 runs:
   using: 'composite'
   steps:
@@ -28,5 +34,8 @@ runs:
         key: deps-node-modules-${{ hashFiles('**/package-lock.json') }}
     - name: Install dependencies
       if: steps.cache.outputs.cache-hit != 'true' || inputs.caching != 'true'
-      run: npm ci
+      id: install-dependencies
+      run: |
+        npm ci
+        echo "cache='${{ inputs.caching }}'" >> $GITHUB_OUTPUT
       shell: bash

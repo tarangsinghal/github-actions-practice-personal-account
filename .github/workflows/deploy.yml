@@ -11,10 +11,13 @@ jobs:
       - name: Get code
         uses: actions/checkout@v4
       - name: Load and cache dependencies
+        id: cache-deps
         uses: ./.github/actions/composite-actions/cached-deps
         with:
           caching: false
           cached_directory: 'node_modules'
+      - name: Output information
+        run: echo "Cache used?  ${{ steps.cache-deps.outputs.install-dependencies }}"
       - name: Lint code
         run: npm run lint
   test:
@@ -24,10 +27,13 @@ jobs:
         uses: actions/checkout@v4
       
       - name: Load and cache dependencies
+        id: cache-deps
         uses: ./.github/actions/composite-actions/cached-deps
         with:
           caching: true
           cached_directory: 'node_modules'
+      - name: Output information
+        run: echo "Cache used?  ${{ steps.cache-deps.outputs.install-dependencies }}"
       - name: Test code
         id: run-tests
         run: npm run test
@@ -45,10 +51,13 @@ jobs:
         uses: actions/checkout@v4
      
       - name: Load and cache dependencies
+        id: cache-deps
         uses: ./.github/actions/composite-actions/cached-deps
         with:
           caching: false
           cached_directory: 'node_modules'
+      - name: Output information
+        run: echo "Cache used?  ${{ steps.cache-deps.outputs.install-dependencies }}"
       - name: Build website
         run: npm run build
       - name: Upload artifacts
