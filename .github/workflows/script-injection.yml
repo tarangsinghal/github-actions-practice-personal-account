@@ -7,10 +7,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  assign-label-1:
+  assign-label-injection-issue:
     runs-on: ubuntu-latest
     steps:
-      - name: Assign label
+      - name: Assign label # Whole text block runs in bash, that's why vulnerable
         run: |
           title="${{ github.event.issue.title  }}"
           if [[ "$title" == *"bug"* ]]; then
@@ -18,7 +18,7 @@ jobs:
           else
           echo "Issue is not about a bug"
           fi
-  assign-label-2:
+  assign-label-fix:
     runs-on: ubuntu-latest
     steps:
       - name: Assign label
