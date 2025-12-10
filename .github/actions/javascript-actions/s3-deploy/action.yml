@@ -14,8 +14,8 @@ inputs:
 outputs:
   website-url:
     description: 'The URL of the deployed website.'
+
 runs:
-  using: 'node16'
-  pre: 'pre.js'
+  using: 'node20'
   main: 'main.js'
-  post: 'post.js'
+  
