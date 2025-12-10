@@ -18,8 +18,8 @@ jobs:
           cached_directory: 'node_modules'
       - name: Output information
         run: |
-          echo "Cache used?  ${{ steps.cache-deps.outputs.used-cache.cache-on }}"
-          echo "Cache hit?  ${{ steps.cache-deps.outputs.used-cache.cache-hit }}"
+          echo "Cache used?  ${{ steps.cache-deps.outputs.cache-on }}"
+          echo "Cache hit?  ${{ steps.cache-deps.outputs.cache-hit }}"
       - name: Lint code
         run: npm run lint
   test:
@@ -35,7 +35,7 @@ jobs:
           caching: true
           cached_directory: 'node_modules'
       - name: Output information
-        run: echo "Cache used?  ${{ steps.cache-deps.outputs.used-cache }}"
+        run: echo "Cache used?  ${{ steps.cache-deps.outputs.cache-on }}"
       - name: Test code
         id: run-tests
         run: npm run test
@@ -59,7 +59,7 @@ jobs:
           caching: false
           cached_directory: 'node_modules'
       - name: Output information
-        run: echo "Cache used?  ${{ steps.cache-deps.outputs.used-cache }}"
+        run: echo "Cache used?  ${{ steps.cache-deps.outputs.cache-on }}"
       - name: Build website
         run: npm run build
       - name: Upload artifacts

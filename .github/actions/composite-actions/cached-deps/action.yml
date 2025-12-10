@@ -13,9 +13,12 @@ inputs:
 
 
 outputs:
-  used-cache:
-    description: 'Caching info'
-    value: ${{ steps.cache-status }}
+  cache-on:
+    description: 'Caching on?'
+    value: ${{ steps.cache-status.outputs.cache-on }}
+  cache-hit:
+    description: 'Caching hit?'
+    value: ${{ steps.cache-status.outputs.cache-hit }}
 
 runs:
   using: 'composite'
