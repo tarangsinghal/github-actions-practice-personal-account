@@ -7,7 +7,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  assign-label:
+  assign-label-1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign label
+        run: |
+          title = "${{ github.event.issue.title  }}"
+          if [[ "$title" == *"bug"* ]]; then
+          echo "Issue is about a bug!"
+          else
+          echo "Issue is not about a bug"
+          fi
+  assign-label-2:
     runs-on: ubuntu-latest
     steps:
       - name: Assign label
