@@ -14,6 +14,11 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: Print inputs
+      run: |
+        echo "caching : ${{inputs.caching}}"
+        echo "cached_directory : ${{inputs.cached_directory}}"
+      shell: bash
     - name: Cache dependencies
       if: ${{ inputs.caching == 'true' }}
       id: cache
